@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesisxrp.xyz/schemas/a2a-envelope-v1.schema.json",
+  "title": "Genesis signed A2A transport envelope v1",
+  "description": "Proposed internal wrapper for a separately validated standards-conformant Agent2Agent 1.x body; these additional fields are Genesis-specific, not required fields in A2A itself.",
+  "type": "object", "additionalProperties": false,
+  "required": ["version", "message_id", "task_id", "sender_agent_id", "recipient_agent_id", "issued_at", "expires_at", "nonce", "payload_sha256", "trace_id", "payload", "auth", "constraints"],
+  "properties": {
+    "version": {"const": "genesis-a2a-envelope-v1"},
+    "message_id": {"type": "string", "format": "uuid"},
+    "task_id": {"type": "string", "format": "uuid"},
+    "sender_agent_id": {"type": "string", "format": "uuid"},
+    "recipient_agent_id": {"type": "string", "format": "uuid"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "nonce": {"type": "string", "minLength": 16, "maxLength": 256},
+    "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "trace_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+    "constraints": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_hops", "max_participants", "max_model_turns", "max_tool_calls", "max_compute_units"],
+      "properties": {
+        "max_hops": {"type": "integer", "minimum": 0, "maximum": 3},
+        "max_participants": {"type": "integer", "minimum": 1, "maximum": 5},
+        "max_model_turns": {"type": "integer", "minimum": 1, "maximum": 20},
+        "max_tool_calls": {"type": "integer", "minimum": 0, "maximum": 100},
+        "max_compute_units": {"type": "integer", "minimum": 0}
+      }
+    },
+    "payload": {"type": "object", "description": "Validate against the relevant A2A 1.x protocol definition in addition to this transport schema."},
+    "auth": {
+      "type": "object", "additionalProperties": false,
+      "required": ["algorithm", "key_id", "signature"],
+      "properties": {
+        "algorithm": {"const": "Ed25519"},
+        "key_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "signature": {"type": "string", "minLength": 32}
+      }
+    }
+  }
+}

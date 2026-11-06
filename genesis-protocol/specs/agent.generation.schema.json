@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesisxrp.xyz/schemas/agent-generation-v1.schema.json",
+  "title": "Genesis NFT agent incarnation \u2014 private persona and shared slot genome",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slot_id",
+    "generation",
+    "agent_id",
+    "nftoken_id",
+    "slot_genome_hash",
+    "persona_seed_commitment",
+    "memory_origin",
+    "previous_agent_id"
+  ],
+  "properties": {
+    "slot_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1111
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "agent_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "nftoken_id": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{64}$"
+    },
+    "slot_genome_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "persona_seed_commitment": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "memory_origin": {
+      "const": "EMPTY"
+    },
+    "previous_agent_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    }
+  },
+  "description": "For generations after first, previous_agent_id names burned predecessor; no predecessor memory, reputation, relationships or private data are inherited."
+}

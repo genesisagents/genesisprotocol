@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesisxrp.xyz/schemas/collection-state-v2.schema.json",
+  "title": "Genesis fixed 1111 slots / generational lifetime issuance v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "original_slots",
+    "initial_mints",
+    "replacement_mints",
+    "total_issued_ever",
+    "validated_burn_count",
+    "live_count",
+    "active_count",
+    "unissued_slot_count",
+    "vacant_slot_count",
+    "mint_out_confirmed",
+    "snapshot_ledger_index"
+  ],
+  "properties": {
+    "original_slots": {
+      "const": 1111
+    },
+    "initial_mints": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1111
+    },
+    "replacement_mints": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_issued_ever": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "validated_burn_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "live_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1111
+    },
+    "active_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1111
+    },
+    "unissued_slot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1111
+    },
+    "vacant_slot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1111
+    },
+    "mint_out_confirmed": {
+      "type": "boolean"
+    },
+    "mint_out_evidence": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 2048
+    },
+    "snapshot_ledger_index": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "description": "Enforce in transactional projector: total_issued_ever=initial_mints+replacement_mints, live_count=total_issued_ever\u2212validated_burn_count, live+vacant+unissued=1111, active<=live. Remint requires a vacancy; cumulative mints may exceed 1111. Mintout is monotonic."
+}

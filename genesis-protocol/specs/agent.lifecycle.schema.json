@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://genesisxrp.xyz/schemas/agent-lifecycle-v2.schema.json",
+  "title": "Genesis Generational Agent Lifecycle v2",
+  "description": "One NFT = one agent generation. Burned individual is terminal; successor NFT reuses only immutable genome slot.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_id",
+    "nftoken_id",
+    "slot_id",
+    "generation",
+    "genome_hash",
+    "persona_seed_commitment",
+    "lifecycle",
+    "revocation_epoch",
+    "last_validated_ledger",
+    "burn_tx_hash"
+  ],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "nftoken_id": {
+      "$ref": "#/$defs/hash256"
+    },
+    "slot_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1111
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "genome_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "persona_seed_commitment": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "previous_agent_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "lifecycle": {
+      "enum": [
+        "RESERVED",
+        "DORMANT",
+        "ACTIVE",
+        "TRANSFER_FROZEN",
+        "SUSPENDED",
+        "BURN_PENDING",
+        "BURNED"
+      ]
+    },
+    "owner_address": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 25,
+      "maxLength": 64
+    },
+    "revocation_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "last_validated_ledger": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "burn_tx_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9A-Fa-f]{64}$"
+    },
+    "burn_ledger_index": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "const": "BURNED"
+          }
+        },
+        "required": [
+          "lifecycle"
+        ]
+      },
+      "then": {
+        "required": [
+          "burn_tx_hash",
+          "burn_ledger_index"
+        ],
+        "properties": {
+          "burn_tx_hash": {
+            "type": "string"
+          },
+          "burn_ledger_index": {
+            "type": "integer"
+          },
+          "owner_address": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash256": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{64}$"
+    }
+  }
+}
